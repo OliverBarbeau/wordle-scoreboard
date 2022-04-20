@@ -52,14 +52,12 @@ async def scoreboard(ctx):
     wins = 0
     submissions = 0
     for i in range(len(player_data)):
-      row = player_data.iloc[i]
-
       if player_data.iloc[i,3] == True:
         wins += 1
         score_sum += int(player_data.iloc[i,1])
       submissions += 1
     avg_score = score_sum/wins
-    player_summaries.append({"player":player, "wins":wins, "submissions":submissions, "avg_score":score_sum/wins})
+    player_summaries.append({"player":player, "wins":wins, "submissions":submissions, "avg_score":avg_score})
   
     #  calculate number of submissions
     #  calculate average score among submissions
@@ -79,21 +77,8 @@ async def scoreboard(ctx):
     placed += 1
 
 
-  order = ["placed","player","avg_score","wins","submissions"]
-  # for each dict in data print (in the order of keys wanted)
+  #order = ["placed","player","avg_score","wins","submissions"]
   player_summaries = [[player_summary["placed"],player_summary["player"],player_summary["avg_score"], player_summary["wins"], player_summary["submissions"]] for player_summary in player_summaries]
-
-
-
-
-
-  # scoreboard_message = table2ascii(
-  #   header=order,
-  #   body=[[player_summary["placed"], player_summary["player"], player_summary["avg_score"], player_summary["wins"], player_summary["submissions"]] for player_summary in player_summaries]
-  #   #footer=["SUM", "130", "140", "135", "130"],
-  # )
-
-
   scoreboard_message = f'>>> `​`​`​\n{tabulate(player_summaries, headers=("placed","player","avg_score","wins","submissions"), tablefmt="fancy_grid")}\n`​`​`​' # sorted_stocks is a dict
 
   #send message
