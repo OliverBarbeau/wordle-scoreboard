@@ -1,0 +1,4 @@
+
+tabulate >= 0.8.9
+discord >= 1.7.3
+pandas >= 1.4.2
