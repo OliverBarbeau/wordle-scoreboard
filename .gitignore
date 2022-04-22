@@ -1,7 +1,10 @@
 secret.py
+secret
 poetry.lock
 pyproject.toml
 venv
 __pycache__
 .vscode
 discord-ec2.pem
+ssh
+testingspace.py

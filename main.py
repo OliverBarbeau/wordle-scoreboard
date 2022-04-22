@@ -1,19 +1,38 @@
 import discord
+# import pytz
 from datetime import datetime, timedelta
 from discord.ext import commands, tasks
 from asyncio import sleep
-from get_scoreboard import get_scoreboard
 from os import environ
 from os.path import exists
-
-# from table2ascii import table2ascii
 #^ basic imports for other features of discord.py and python
 import secret
+from get_scoreboard import get_scoreboard
 #^ internal project function imports ^
 
-client = discord.Client()
+# default_tz = pytz.timezone('US/Central')
 
-client = commands.Bot(command_prefix = '!') #put your own prefix here
+# class CustomHelpCommand(commands.HelpCommand):
+#   def __init__(self):
+#     super().__init__()
+#   async def send_bot_help(self, mapping):
+#     for cog in mapping:
+#       await self.get_destination().send(f'{cog.qualified_name}: {[command.name for command in mapping[cog]]}')
+#     # return await super().send_bot_help(mapping)
+#   async def send_cog_help(self, cog):
+#     await self.get_destination().send(f'{cog.qualified_name}: {[command.name for command in cog.get_commands()]}')
+#     # return await super().send_cog_help(cog)
+#   async def send_group_help(self, group):
+#     await self.get_destination().send(f'{group.name}: {[command.name for index, command in enumerate(group.commands)]}')
+#     # return await super().send_group_help(group)
+#   async def send_command_help(self, command):
+#     await self.get_destination().send(command.name)
+#     # return await super().send_command_help(command)
+  
+
+client = discord.Client()
+# client = commands.Bot(command_prefix = '!', help_command=CustomHelpCommand())
+client = commands.Bot(command_prefix = '!')
 
 @client.event
 async def on_ready():
@@ -24,10 +43,6 @@ async def on_ready():
 async def ping(ctx):
   await ctx.channel.send("pong!")
 #print(dir(message))
-
-@client.command()
-async def d(ctx):
-  await ctx.msg.delete()
 
 @client.command()
 async def scoreboard(ctx): # primary user command
@@ -49,7 +64,6 @@ async def schedule_weekly_messages():
     sent_message = await channel.send(scoreboard_message)
     print(sent_message)
 
-
 my_secret = ""
 if exists('secret.py'):
   environ['TOKEN'] = secret.TOKEN  # local enviroment secret key access
@@ -62,4 +76,3 @@ if my_secret != "":
   client.run(my_secret) 
 else:
   print("no secret key found!")
-# 
