@@ -57,7 +57,7 @@ async def schedule_weekly_messages():
     then = then.replace(hour=0, minute=0, second=0, microsecond=0)
     #then = now.replace(hour=5, minute=29, second=0, microsecond=0)
     wait_time = (then-now).total_seconds()
-    print('weekly messages scheduled, sleeping for: ' + str(timedelta(seconds=wait_time)))
+    print('weekly messages scheduled, sleeping for: ' + str( timedelta( seconds = wait_time ) ) )
     channel = client.get_channel(965658295715115123)
     await sleep(wait_time)
     scoreboard_message = await get_scoreboard(channel, client.user) 
