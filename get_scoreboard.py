@@ -70,7 +70,7 @@ async def get_scoreboard(channel: TextChannel, user: User):
   date_limit_string = f'{(date_limit_tz):%m-%d-%Y}'
   week_of_string = 'week of ' + date_limit_string
   player_summary_data_headers = ["placed","player","avg_score","wins","submissions","S M T W T F S"]
-  ends_in = (((date_limit_) + timedelta(7)) - (now-timedelta(microseconds= now.microsecond)))
+  ends_in = (((date_limit_tz) + timedelta(7)) - (now-timedelta(microseconds= now.microsecond)))
   ends_in = ' weekly scoreboard closes in: ' + (str(ends_in))
   scoreboard_message = construct_scoreboard_message(text_header=week_of_string, data_headers=player_summary_data_headers, data=player_summaries, text_footer=ends_in)
   print(scoreboard_message)
