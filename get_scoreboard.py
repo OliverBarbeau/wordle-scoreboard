@@ -23,8 +23,8 @@ async def get_scoreboard(channel: TextChannel, user: User):
   players = data["player"].value_counts() # get number of unique players this week
   players = [k for (k,v) in players.items()]
   #print(players)
-  this_weeks_first_wordle_number = date_to_wordle_number(date_limit.date())
-  todays_wordle_number = date_to_wordle_number(now.date())
+  this_weeks_first_wordle_number = date_to_wordle_number(date_limit_tz.date())
+  todays_wordle_number = date_to_wordle_number(now_tz.date())
   completed_days_this_week = todays_wordle_number - this_weeks_first_wordle_number
   player_score_dict_template = {this_weeks_first_wordle_number+i:"-" for i in range(completed_days_this_week)}
   player_score_dict_template.update({this_weeks_first_wordle_number+completed_days_this_week+i:"_" for i in range(7-completed_days_this_week)})
@@ -70,7 +70,7 @@ async def get_scoreboard(channel: TextChannel, user: User):
   date_limit_string = f'{(date_limit_tz):%m-%d-%Y}'
   week_of_string = 'week of ' + date_limit_string
   player_summary_data_headers = ["placed","player","avg_score","wins","submissions","S M T W T F S"]
-  ends_in = (((date_limit) + timedelta(7)) - (now-timedelta(microseconds= now.microsecond)))
+  ends_in = (((date_limit_) + timedelta(7)) - (now-timedelta(microseconds= now.microsecond)))
   ends_in = ' weekly scoreboard closes in: ' + (str(ends_in))
   scoreboard_message = construct_scoreboard_message(text_header=week_of_string, data_headers=player_summary_data_headers, data=player_summaries, text_footer=ends_in)
   print(scoreboard_message)
