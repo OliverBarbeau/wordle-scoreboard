@@ -40,11 +40,11 @@ async def get_scoreboard(channel: TextChannel, user: User):
     wins = 0 # count number of wins
     submissions = 0 #  count number of submissions
     for i in range(len(player_data)):
+      wordle_number = int(player_data.iloc[i, 0])
       if player_data.iloc[i,3] == True: # check that player won in this submission
         wins += 1
         score = int(player_data.iloc[i,1])
         score_sum += score
-        wordle_number = int(player_data.iloc[i, 0])
         player_score_dict[wordle_number] = score
       else:
         player_score_dict[wordle_number] = "X"
