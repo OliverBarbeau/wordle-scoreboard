@@ -71,7 +71,7 @@ async def schedule_weekly_messages():
 
 my_secret = ""
 if exists('secret.py'):
-  environ['TOKEN'] = secret.TOKEN  # local file discord application api secret key
+  my_secret = secret.TOKEN  # local file discord application api secret key
 
 if my_secret != "":
   client.run(my_secret) 
