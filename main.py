@@ -1,5 +1,5 @@
 import discord
-# import pytz
+import pytz
 from datetime import datetime, timedelta
 from discord.ext import commands, tasks
 from asyncio import sleep
@@ -10,7 +10,7 @@ import secret
 from get_scoreboard import get_scoreboard
 #^ internal project function imports ^
 
-# default_tz = pytz.timezone('US/Central')
+default_tz = pytz.timezone('US/Central')
 
 # class CustomHelpCommand(commands.HelpCommand):
 #   def __init__(self):
@@ -33,6 +33,7 @@ from get_scoreboard import get_scoreboard
 client = discord.Client()
 # client = commands.Bot(command_prefix = '!', help_command=CustomHelpCommand())
 client = commands.Bot(command_prefix = '!')
+bot_user = client.user
 
 @client.event
 async def on_ready():
@@ -46,33 +47,33 @@ async def ping(ctx):
 
 @client.command()
 async def scoreboard(ctx): # primary user command
-  scoreboard_message = await get_scoreboard(ctx.channel, client.user) 
+  scoreboard_message = await get_scoreboard(ctx.channel, bot_user) 
   await ctx.channel.send(scoreboard_message)
 
 @tasks.loop(hours=7*24)
 async def schedule_weekly_messages():
   while True:
-    now = datetime.now()
-    then = now + timedelta(days=7)
-    then = then.replace(hour=0, minute=0, second=0, microsecond=0)
-    #then = now.replace(hour=5, minute=29, second=0, microsecond=0)
-    wait_time = (then-now).total_seconds()
-    print('weekly messages scheduled, sleeping for: ' + str( timedelta( seconds = wait_time ) ) )
-    channel = client.get_channel(965658295715115123)
-    await sleep(wait_time)
-    scoreboard_message = await get_scoreboard(channel, client.user) 
+    # for channel in channels:
+    now_tz = datetime.now(tz=default_tz)
+    then = now_tz + timedelta(days=7)
+    then = then.replace(hour=0, minute=3, second=0, microsecond=0) # leave a few minutes open for the scoreboard to post. And strip of timezone info.
+    then = then.replace(tzinfo=None) # strip of timezone info for timedelta calculcations to follow
+    now = now_tz.replace(tzinfo=None) 
+    wait_time = then-now
+    print('weekly messages scheduled, sleeping for: ', wait_time)
+    await sleep(wait_time.total_seconds())
+    
+    channel = client.get_channel(965658295715115123) 
+    scoreboard_message = await get_scoreboard(channel, bot_user) 
     sent_message = await channel.send(scoreboard_message)
+
     print(sent_message)
 
 my_secret = ""
 if exists('secret.py'):
-  environ['TOKEN'] = secret.TOKEN  # local enviroment secret key access
-try:
-  my_secret = environ['TOKEN'] # replit secret key access
-except KeyError:
-  pass
+  environ['TOKEN'] = secret.TOKEN  # local file discord application api secret key
 
 if my_secret != "":
   client.run(my_secret) 
 else:
-  print("no secret key found!")
+  print("no discord secret key found!")
