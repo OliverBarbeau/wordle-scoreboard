@@ -54,11 +54,12 @@ async def scoreboard(ctx): # primary user command
 async def schedule_weekly_messages():
   while True:
     # for channel in channels:
-    now_tz = datetime.now(tz=default_tz)
-    then = now_tz + timedelta(days=7)
-    then = then.replace(hour=0, minute=3, second=0, microsecond=0) # leave a few minutes open for the scoreboard to post. And strip of timezone info.
-    then = then.replace(tzinfo=None) # strip of timezone info for timedelta calculcations to follow
-    now = now_tz.replace(tzinfo=None) 
+    now = datetime.now(tz=default_tz)
+    then = now.replace(hour=23, minute=59, second=59, microsecond=0) + timedelta((5 - now.weekday())) # ends with the week on saturday
+    # now = now_tz.replace(tzinfo=None) 
+    
+     # leave a few minutes open for the scoreboard to post. And strip of timezone info.
+     # strip of timezone info for timedelta calculcations to follow
     wait_time = then-now
     print('weekly messages scheduled, sleeping for: ', wait_time)
     await sleep(wait_time.total_seconds())
